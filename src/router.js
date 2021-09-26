@@ -14,9 +14,12 @@ routes.post("/users", usersValidator.store, usersCtrl.store);
 
 routes.post("/login", sessionsValidator.store, sessionsCtrl.store);
 
+routes.get("/recipes", recipesCtrl.index);
+
+routes.get("/recipes/:id", recipesCtrl.find);
+
 routes.use(authorization);
 
 routes.post("/recipes", recipesValidator.store, recipesCtrl.store);
-
 
 module.exports = routes;

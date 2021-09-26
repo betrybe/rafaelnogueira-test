@@ -1,4 +1,5 @@
 const Database = require("../database/db");
+const { ObjectId } = require("mongodb");
 
 class Recipe {
   db;
@@ -19,6 +20,26 @@ class Recipe {
     let db = await Database.getDatabase();
 
     return new Recipe(recipe, db);
+  }
+
+  static async findAll() {
+    let db = await Database.getDatabase();
+
+    let recipes = await db.collection("recipes").find({}).toArray();
+
+    return recipes;
+  }
+
+  static async findById(id) {
+    try {
+      let db = await Database.getDatabase();
+
+      let recipe = await db.collection("recipes").findOne(ObjectId(id));
+
+      return recipe;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async insert() {
