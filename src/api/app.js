@@ -4,6 +4,10 @@ const routes = require("../router");
 
 const app = express();
 
+// Colocaria a chave em uma variável de ambiente, 
+// está aqui pois foi pedido para não usar no env
+global.tokenKey = "485ad2831bd193414c07447456a85750";
+
 app.use(express.json());
 
 // Não remover esse end-point, ele é necessário para o avaliador

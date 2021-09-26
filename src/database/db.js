@@ -15,6 +15,8 @@ class Database {
       let users = await this.db.createCollection("users");
 
       users.createIndex("email", { unique: true });
+
+      //já que não há restrições, não achei necessário criar a colection recipes
     }
 
     return this.db;
