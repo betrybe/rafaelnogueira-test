@@ -22,4 +22,6 @@ routes.use(authorization);
 
 routes.post("/recipes", recipesValidator.store, recipesCtrl.store);
 
+routes.put("/recipes/:id", recipesCtrl.update);
+
 module.exports = routes;

@@ -3,13 +3,15 @@ const { ObjectId } = require("mongodb");
 
 class Recipe {
   db;
+  _id;
   name;
   ingredients;
   preparation;
   userId;
 
-  constructor({ name, ingredients, preparation, userId }, db) {
+  constructor({ _id = undefined, name, ingredients, preparation, userId }, db) {
     this.db = db;
+    this._id = _id;
     this.name = name;
     this.ingredients = ingredients;
     this.preparation = preparation;
@@ -30,13 +32,41 @@ class Recipe {
     return recipes;
   }
 
+  async save() {
+    try {
+      let result = await this.db.collection("recipes").updateOne(
+        { _id: ObjectId(this._id) },
+        {
+          $set: {
+            name: this.name,
+            ingredients: this.ingredients,
+            preparation: this.preparation,
+            userId: this.userId,
+          },
+        }
+      );
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   static async findById(id) {
     try {
       let db = await Database.getDatabase();
 
       let recipe = await db.collection("recipes").findOne(ObjectId(id));
 
-      return recipe;
+      return new Recipe(
+        {
+          _id: recipe._id,
+          name: recipe.name,
+          ingredients: recipe.ingredients,
+          preparation: recipe.preparation,
+          userId: recipe.userId,
+        },
+        db
+      );
     } catch (error) {
       console.error(error);
     }
@@ -55,7 +85,7 @@ class Recipe {
 
       this._id = recipe._id;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
