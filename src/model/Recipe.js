@@ -8,6 +8,7 @@ class Recipe {
   ingredients;
   preparation;
   userId;
+  image;
 
   constructor({ _id = undefined, name, ingredients, preparation, userId }, db) {
     this.db = db;
@@ -42,10 +43,20 @@ class Recipe {
             ingredients: this.ingredients,
             preparation: this.preparation,
             userId: this.userId,
+            image: this.image,
           },
         }
       );
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
+  async destroy() {
+    try {
+      await this.db
+        .collection("recipes")
+        .deleteOne({ _id: ObjectId(this._id) });
     } catch (error) {
       console.error(error);
     }
@@ -56,6 +67,8 @@ class Recipe {
       let db = await Database.getDatabase();
 
       let recipe = await db.collection("recipes").findOne(ObjectId(id));
+
+      if (!recipe) return null;
 
       return new Recipe(
         {
@@ -96,6 +109,7 @@ class Recipe {
       ingredients: this.ingredients,
       preparation: this.preparation,
       userId: this.userId,
+      image: this.image,
     };
   }
 }

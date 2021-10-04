@@ -4,6 +4,11 @@ module.exports = {
   async store(req, res) {
     let { name, email, password } = req.body;
 
+    if (req.jwtUser.role !== "admin")
+      return res
+        .status(403)
+        .send({ message: "Only admins can register new admins" });
+
     try {
       let user = await User.findByEmail(email);
 
@@ -14,7 +19,7 @@ module.exports = {
         name,
         email,
         password,
-        role: "user",
+        role: "admin",
       });
 
       await user.insert();

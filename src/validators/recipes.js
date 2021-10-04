@@ -6,7 +6,7 @@ module.exports = {
 
     if (!name || !ingredients || !preparation)
       return res.status(400).send({
-        message: "Invalid entries. Try again",
+        message: "Invalid entries. Try again.",
       });
 
     return next();

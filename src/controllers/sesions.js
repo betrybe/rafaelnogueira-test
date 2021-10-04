@@ -22,7 +22,7 @@ module.exports = {
         global.tokenKey
       );
 
-      res.status(201).send({ token });
+      res.status(200).send({ token });
     } catch (error) {
       console.error(error);
       res.status(500).send({ error: "Internal error" });

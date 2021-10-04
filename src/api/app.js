@@ -1,8 +1,12 @@
 const express = require("express");
 const users = require("../controllers/users");
 const routes = require("../router");
+const path = require('path');
+
 
 const app = express();
+
+app.use('/images', express.static(path.join(__dirname, '..', 'uploads')));
 
 // Colocaria a chave em uma variável de ambiente, 
 // está aqui pois foi pedido para não usar no env

@@ -30,6 +30,7 @@ module.exports = {
 
     let { jwtUser } = req;
 
+    console.log(jwtUser)
     try {
       let recipe = await Recipe.build({
         name,
@@ -42,6 +43,7 @@ module.exports = {
 
       res.status(201).send({ recipe: recipe.getRecipe() });
     } catch (error) {
+      console.log(error);
       res.status(500).send({ error: "Internal error" });
     }
   },
@@ -55,7 +57,7 @@ module.exports = {
     try {
       let recipe = await Recipe.findById(id);
 
-      
+      if (!recipe) return res.status(404).send({ message: "not found" });
 
       if (recipe.userId !== jwtUser._id && jwtUser.role !== "admin")
         return res.status(403).send({ message: "access defined" });
@@ -67,6 +69,28 @@ module.exports = {
       await recipe.save();
 
       res.status(200).send(recipe.getRecipe());
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ error: "Internal error" });
+    }
+  },
+
+  async delete(req, res) {
+    const { id } = req.params;
+
+    let { jwtUser } = req;
+
+    try {
+      let recipe = await Recipe.findById(id);
+
+      if (!recipe) return res.status(404).send({ message: "not found" });
+
+      if (recipe.userId !== jwtUser._id && jwtUser.role !== "admin")
+        return res.status(403).send({ message: "access defined" });
+
+      await recipe.destroy();
+
+      res.status(204).send();
     } catch (error) {
       console.log(error);
       res.status(500).send({ error: "Internal error" });
